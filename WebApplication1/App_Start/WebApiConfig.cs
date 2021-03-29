@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Filters;
-using WebApplication1.Filters;
+using ProfApreciat.Filters;
 
-namespace WebApplication1
+namespace ProfApreciat
 {
     public static class WebApiConfig
     {

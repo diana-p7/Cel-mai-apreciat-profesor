@@ -10,7 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Filters;
 using DotNetNuke.Services.Log.EventLog;
 
-namespace WebApplication1.Filters
+namespace ProfApreciat.Filters
 {
         /// <summary>
         /// Un atribut care se poate pune pe un controller sau un endpoint si care sa gestioneze exceptiile care sunt aruncate la nuvelul acestora

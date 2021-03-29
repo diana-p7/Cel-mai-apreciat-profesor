@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using DotNetNuke.Web.Api;
-using WebApplication1.Filters;
+using ProfApreciat.Filters;
 
-namespace WebApplication1.Controllers
+namespace ProfApreciat.Controllers
 {
     //atribut care prelucreaza raspunsul si face logging in admin logs in dnn
     [ExceptionHandling]
