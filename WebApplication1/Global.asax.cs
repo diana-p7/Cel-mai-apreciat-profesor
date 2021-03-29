@@ -1,7 +1,7 @@
 using System.Web.Http;
-using WebApplication1.Filters;
+using ProfApreciat.Filters;
 
-namespace WebApplication1
+namespace ProfApreciat
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
