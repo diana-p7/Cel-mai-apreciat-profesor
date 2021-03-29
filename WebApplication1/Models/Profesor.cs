@@ -17,17 +17,19 @@ namespace ProfApreciat.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Profesor()
         {
-            this.EvaluareProfesorApreciats = new HashSet<EvaluareProfesorApreciat>();
+            this.RezultatVotProfesorProgramStudius = new HashSet<RezultatVotProfesorProgramStudiu>();
         }
     
         public int ID_Profesor { get; set; }
+        public int ID_FacultateServiciu { get; set; }
         public string Email { get; set; }
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public string GradDidactic { get; set; }
         public bool EligibilRemunerare { get; set; }
     
+        public virtual Facultate Facultate { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EvaluareProfesorApreciat> EvaluareProfesorApreciats { get; set; }
+        public virtual ICollection<RezultatVotProfesorProgramStudiu> RezultatVotProfesorProgramStudius { get; set; }
     }
 }

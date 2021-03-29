@@ -5,15 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="MyDNNDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="EvaluareProfesorApreciat">
-          <Key>
-            <PropertyRef Name="ID_EvaluareProfesor" />
-          </Key>
-          <Property Name="ID_EvaluareProfesor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ID_ProgramStudiu" Type="int" Nullable="false" />
-          <Property Name="ID_Profesor" Type="int" Nullable="false" />
-          <Property Name="NumarVoturi" Type="smallint" Nullable="false" />
-        </EntityType>
         <EntityType Name="Facultate">
           <Key>
             <PropertyRef Name="ID_Facultate" />
@@ -27,6 +18,7 @@
             <PropertyRef Name="ID_Profesor" />
           </Key>
           <Property Name="ID_Profesor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_FacultateServiciu" Type="int" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Nume" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Prenume" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -39,9 +31,18 @@
           </Key>
           <Property Name="ID_ProgramStudiu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID_Facultate" Type="int" Nullable="false" />
+          <Property Name="ID_TipCiclu" Type="int" Nullable="false" />
           <Property Name="DenumireScurta" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Denumire" Type="nvarchar" MaxLength="200" />
-          <Property Name="ID_TipCiclu" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RezultatVotProfesorProgramStudiu">
+          <Key>
+            <PropertyRef Name="ID_RezultatVot" />
+          </Key>
+          <Property Name="ID_RezultatVot" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_ProgramStudiu" Type="int" Nullable="false" />
+          <Property Name="ID_Profesor" Type="int" Nullable="false" />
+          <Property Name="NumarVoturi" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="TipCicluInvatamant">
           <Key>
@@ -52,25 +53,37 @@
         </EntityType>
         <Association Name="FK_EvaluareProfesorApreciat_Profesor">
           <End Role="Profesor" Type="Self.Profesor" Multiplicity="1" />
-          <End Role="EvaluareProfesorApreciat" Type="Self.EvaluareProfesorApreciat" Multiplicity="*" />
+          <End Role="RezultatVotProfesorProgramStudiu" Type="Self.RezultatVotProfesorProgramStudiu" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Profesor">
               <PropertyRef Name="ID_Profesor" />
             </Principal>
-            <Dependent Role="EvaluareProfesorApreciat">
+            <Dependent Role="RezultatVotProfesorProgramStudiu">
               <PropertyRef Name="ID_Profesor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EvaluareProfesorApreciat_ProgramStudiu">
           <End Role="ProgramStudiu" Type="Self.ProgramStudiu" Multiplicity="1" />
-          <End Role="EvaluareProfesorApreciat" Type="Self.EvaluareProfesorApreciat" Multiplicity="*" />
+          <End Role="RezultatVotProfesorProgramStudiu" Type="Self.RezultatVotProfesorProgramStudiu" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ProgramStudiu">
               <PropertyRef Name="ID_ProgramStudiu" />
             </Principal>
-            <Dependent Role="EvaluareProfesorApreciat">
+            <Dependent Role="RezultatVotProfesorProgramStudiu">
               <PropertyRef Name="ID_ProgramStudiu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profesor_Facultate">
+          <End Role="Facultate" Type="Self.Facultate" Multiplicity="1" />
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facultate">
+              <PropertyRef Name="ID_Facultate" />
+            </Principal>
+            <Dependent Role="Profesor">
+              <PropertyRef Name="ID_FacultateServiciu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -98,19 +111,59 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="adaugaRezultatVotProfesorProgramStudiu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProgramStudiu" Type="int" Mode="In" />
+          <Parameter Name="idProfesor" Type="int" Mode="In" />
+          <Parameter Name="numarVoturi" Type="smallint" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="spAdaugaFacultate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="denumireScurta" Type="nvarchar" Mode="In" />
+          <Parameter Name="denumire" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="spAdaugaProfesor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nume" Type="nvarchar" Mode="In" />
+          <Parameter Name="prenume" Type="nvarchar" Mode="In" />
+          <Parameter Name="email" Type="nvarchar" Mode="In" />
+          <Parameter Name="gradDidactic" Type="nvarchar" Mode="In" />
+          <Parameter Name="idFacultateServiciu" Type="int" Mode="In" />
+          <Parameter Name="eligibilRemunerare" Type="bit" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="spAdaugaProgramStudiu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idFacultate" Type="int" Mode="In" />
+          <Parameter Name="idTipCiclu" Type="int" Mode="In" />
+          <Parameter Name="denumireScurta" Type="nvarchar" Mode="In" />
+          <Parameter Name="denumire" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="spAdaugaTipCicluInvatamant" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="denumire" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
         <EntityContainer Name="MyDNNDatabaseModelStoreContainer">
-          <EntitySet Name="EvaluareProfesorApreciat" EntityType="Self.EvaluareProfesorApreciat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Facultate" EntityType="Self.Facultate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProgramStudiu" EntityType="Self.ProgramStudiu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RezultatVotProfesorProgramStudiu" EntityType="Self.RezultatVotProfesorProgramStudiu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipCicluInvatamant" EntityType="Self.TipCicluInvatamant" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_EvaluareProfesorApreciat_Profesor" Association="Self.FK_EvaluareProfesorApreciat_Profesor">
             <End Role="Profesor" EntitySet="Profesor" />
-            <End Role="EvaluareProfesorApreciat" EntitySet="EvaluareProfesorApreciat" />
+            <End Role="RezultatVotProfesorProgramStudiu" EntitySet="RezultatVotProfesorProgramStudiu" />
           </AssociationSet>
           <AssociationSet Name="FK_EvaluareProfesorApreciat_ProgramStudiu" Association="Self.FK_EvaluareProfesorApreciat_ProgramStudiu">
             <End Role="ProgramStudiu" EntitySet="ProgramStudiu" />
-            <End Role="EvaluareProfesorApreciat" EntitySet="EvaluareProfesorApreciat" />
+            <End Role="RezultatVotProfesorProgramStudiu" EntitySet="RezultatVotProfesorProgramStudiu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profesor_Facultate" Association="Self.FK_Profesor_Facultate">
+            <End Role="Facultate" EntitySet="Facultate" />
+            <End Role="Profesor" EntitySet="Profesor" />
           </AssociationSet>
           <AssociationSet Name="FK_ProgramStudiu_Facultate" Association="Self.FK_ProgramStudiu_Facultate">
             <End Role="Facultate" EntitySet="Facultate" />
@@ -126,17 +179,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MyDNNDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="EvaluareProfesorApreciat">
-          <Key>
-            <PropertyRef Name="ID_EvaluareProfesor" />
-          </Key>
-          <Property Name="ID_EvaluareProfesor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ID_ProgramStudiu" Type="Int32" Nullable="false" />
-          <Property Name="ID_Profesor" Type="Int32" Nullable="false" />
-          <Property Name="NumarVoturi" Type="Int16" Nullable="false" />
-          <NavigationProperty Name="Profesor" Relationship="Self.FK_EvaluareProfesorApreciat_Profesor" FromRole="EvaluareProfesorApreciat" ToRole="Profesor" />
-          <NavigationProperty Name="ProgramStudiu" Relationship="Self.FK_EvaluareProfesorApreciat_ProgramStudiu" FromRole="EvaluareProfesorApreciat" ToRole="ProgramStudiu" />
-        </EntityType>
         <EntityType Name="Facultate">
           <Key>
             <PropertyRef Name="ID_Facultate" />
@@ -144,6 +186,7 @@
           <Property Name="ID_Facultate" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DenumireScurta" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Denumire" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Profesors" Relationship="Self.FK_Profesor_Facultate" FromRole="Facultate" ToRole="Profesor" />
           <NavigationProperty Name="ProgramStudius" Relationship="Self.FK_ProgramStudiu_Facultate" FromRole="Facultate" ToRole="ProgramStudiu" />
         </EntityType>
         <EntityType Name="Profesor">
@@ -151,12 +194,14 @@
             <PropertyRef Name="ID_Profesor" />
           </Key>
           <Property Name="ID_Profesor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_FacultateServiciu" Type="Int32" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Prenume" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="GradDidactic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="EligibilRemunerare" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="EvaluareProfesorApreciats" Relationship="Self.FK_EvaluareProfesorApreciat_Profesor" FromRole="Profesor" ToRole="EvaluareProfesorApreciat" />
+          <NavigationProperty Name="Facultate" Relationship="Self.FK_Profesor_Facultate" FromRole="Profesor" ToRole="Facultate" />
+          <NavigationProperty Name="RezultatVotProfesorProgramStudius" Relationship="Self.FK_EvaluareProfesorApreciat_Profesor" FromRole="Profesor" ToRole="RezultatVotProfesorProgramStudiu" />
         </EntityType>
         <EntityType Name="ProgramStudiu">
           <Key>
@@ -164,12 +209,23 @@
           </Key>
           <Property Name="ID_ProgramStudiu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ID_Facultate" Type="Int32" Nullable="false" />
+          <Property Name="ID_TipCiclu" Type="Int32" Nullable="false" />
           <Property Name="DenumireScurta" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Denumire" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ID_TipCiclu" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="EvaluareProfesorApreciats" Relationship="Self.FK_EvaluareProfesorApreciat_ProgramStudiu" FromRole="ProgramStudiu" ToRole="EvaluareProfesorApreciat" />
           <NavigationProperty Name="Facultate" Relationship="Self.FK_ProgramStudiu_Facultate" FromRole="ProgramStudiu" ToRole="Facultate" />
+          <NavigationProperty Name="RezultatVotProfesorProgramStudius" Relationship="Self.FK_EvaluareProfesorApreciat_ProgramStudiu" FromRole="ProgramStudiu" ToRole="RezultatVotProfesorProgramStudiu" />
           <NavigationProperty Name="TipCicluInvatamant" Relationship="Self.FK_ProgramStudiu_TipCicluInvatamant" FromRole="ProgramStudiu" ToRole="TipCicluInvatamant" />
+        </EntityType>
+        <EntityType Name="RezultatVotProfesorProgramStudiu">
+          <Key>
+            <PropertyRef Name="ID_RezultatVot" />
+          </Key>
+          <Property Name="ID_RezultatVot" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_ProgramStudiu" Type="Int32" Nullable="false" />
+          <Property Name="ID_Profesor" Type="Int32" Nullable="false" />
+          <Property Name="NumarVoturi" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Profesor" Relationship="Self.FK_EvaluareProfesorApreciat_Profesor" FromRole="RezultatVotProfesorProgramStudiu" ToRole="Profesor" />
+          <NavigationProperty Name="ProgramStudiu" Relationship="Self.FK_EvaluareProfesorApreciat_ProgramStudiu" FromRole="RezultatVotProfesorProgramStudiu" ToRole="ProgramStudiu" />
         </EntityType>
         <EntityType Name="TipCicluInvatamant">
           <Key>
@@ -179,27 +235,15 @@
           <Property Name="Denumire" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="ProgramStudius" Relationship="Self.FK_ProgramStudiu_TipCicluInvatamant" FromRole="TipCicluInvatamant" ToRole="ProgramStudiu" />
         </EntityType>
-        <Association Name="FK_EvaluareProfesorApreciat_Profesor">
-          <End Role="Profesor" Type="Self.Profesor" Multiplicity="1" />
-          <End Role="EvaluareProfesorApreciat" Type="Self.EvaluareProfesorApreciat" Multiplicity="*" />
+        <Association Name="FK_Profesor_Facultate">
+          <End Role="Facultate" Type="Self.Facultate" Multiplicity="1" />
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Profesor">
-              <PropertyRef Name="ID_Profesor" />
+            <Principal Role="Facultate">
+              <PropertyRef Name="ID_Facultate" />
             </Principal>
-            <Dependent Role="EvaluareProfesorApreciat">
-              <PropertyRef Name="ID_Profesor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EvaluareProfesorApreciat_ProgramStudiu">
-          <End Role="ProgramStudiu" Type="Self.ProgramStudiu" Multiplicity="1" />
-          <End Role="EvaluareProfesorApreciat" Type="Self.EvaluareProfesorApreciat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProgramStudiu">
-              <PropertyRef Name="ID_ProgramStudiu" />
-            </Principal>
-            <Dependent Role="EvaluareProfesorApreciat">
-              <PropertyRef Name="ID_ProgramStudiu" />
+            <Dependent Role="Profesor">
+              <PropertyRef Name="ID_FacultateServiciu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -215,6 +259,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EvaluareProfesorApreciat_Profesor">
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="1" />
+          <End Role="RezultatVotProfesorProgramStudiu" Type="Self.RezultatVotProfesorProgramStudiu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="ID_Profesor" />
+            </Principal>
+            <Dependent Role="RezultatVotProfesorProgramStudiu">
+              <PropertyRef Name="ID_Profesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EvaluareProfesorApreciat_ProgramStudiu">
+          <End Role="ProgramStudiu" Type="Self.ProgramStudiu" Multiplicity="1" />
+          <End Role="RezultatVotProfesorProgramStudiu" Type="Self.RezultatVotProfesorProgramStudiu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProgramStudiu">
+              <PropertyRef Name="ID_ProgramStudiu" />
+            </Principal>
+            <Dependent Role="RezultatVotProfesorProgramStudiu">
+              <PropertyRef Name="ID_ProgramStudiu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProgramStudiu_TipCicluInvatamant">
           <End Role="TipCicluInvatamant" Type="Self.TipCicluInvatamant" Multiplicity="1" />
           <End Role="ProgramStudiu" Type="Self.ProgramStudiu" Multiplicity="*" />
@@ -227,45 +295,75 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MyDNNDatabaseEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="EvaluareProfesorApreciats" EntityType="Self.EvaluareProfesorApreciat" />
+        <EntityContainer Name="MyDNNDatabaseEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Facultates" EntityType="Self.Facultate" />
           <EntitySet Name="Profesors" EntityType="Self.Profesor" />
           <EntitySet Name="ProgramStudius" EntityType="Self.ProgramStudiu" />
+          <EntitySet Name="RezultatVotProfesorProgramStudius" EntityType="Self.RezultatVotProfesorProgramStudiu" />
           <EntitySet Name="TipCicluInvatamants" EntityType="Self.TipCicluInvatamant" />
-          <AssociationSet Name="FK_EvaluareProfesorApreciat_Profesor" Association="Self.FK_EvaluareProfesorApreciat_Profesor">
+          <AssociationSet Name="FK_Profesor_Facultate" Association="Self.FK_Profesor_Facultate">
+            <End Role="Facultate" EntitySet="Facultates" />
             <End Role="Profesor" EntitySet="Profesors" />
-            <End Role="EvaluareProfesorApreciat" EntitySet="EvaluareProfesorApreciats" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EvaluareProfesorApreciat_ProgramStudiu" Association="Self.FK_EvaluareProfesorApreciat_ProgramStudiu">
-            <End Role="ProgramStudiu" EntitySet="ProgramStudius" />
-            <End Role="EvaluareProfesorApreciat" EntitySet="EvaluareProfesorApreciats" />
           </AssociationSet>
           <AssociationSet Name="FK_ProgramStudiu_Facultate" Association="Self.FK_ProgramStudiu_Facultate">
             <End Role="Facultate" EntitySet="Facultates" />
             <End Role="ProgramStudiu" EntitySet="ProgramStudius" />
           </AssociationSet>
+          <AssociationSet Name="FK_EvaluareProfesorApreciat_Profesor" Association="Self.FK_EvaluareProfesorApreciat_Profesor">
+            <End Role="Profesor" EntitySet="Profesors" />
+            <End Role="RezultatVotProfesorProgramStudiu" EntitySet="RezultatVotProfesorProgramStudius" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EvaluareProfesorApreciat_ProgramStudiu" Association="Self.FK_EvaluareProfesorApreciat_ProgramStudiu">
+            <End Role="ProgramStudiu" EntitySet="ProgramStudius" />
+            <End Role="RezultatVotProfesorProgramStudiu" EntitySet="RezultatVotProfesorProgramStudius" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProgramStudiu_TipCicluInvatamant" Association="Self.FK_ProgramStudiu_TipCicluInvatamant">
             <End Role="TipCicluInvatamant" EntitySet="TipCicluInvatamants" />
             <End Role="ProgramStudiu" EntitySet="ProgramStudius" />
           </AssociationSet>
+          <FunctionImport Name="adaugaRezultatVotProfesorProgramStudiu">
+            <Parameter Name="idProgramStudiu" Mode="In" Type="Int32" />
+            <Parameter Name="idProfesor" Mode="In" Type="Int32" />
+            <Parameter Name="numarVoturi" Mode="In" Type="Int16" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAdaugaFacultate">
+            <Parameter Name="denumireScurta" Mode="In" Type="String" />
+            <Parameter Name="denumire" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAdaugaProfesor">
+            <Parameter Name="nume" Mode="In" Type="String" />
+            <Parameter Name="prenume" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="gradDidactic" Mode="In" Type="String" />
+            <Parameter Name="idFacultateServiciu" Mode="In" Type="Int32" />
+            <Parameter Name="eligibilRemunerare" Mode="In" Type="Boolean" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAdaugaProgramStudiu">
+            <Parameter Name="idFacultate" Mode="In" Type="Int32" />
+            <Parameter Name="idTipCiclu" Mode="In" Type="Int32" />
+            <Parameter Name="denumireScurta" Mode="In" Type="String" />
+            <Parameter Name="denumire" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAdaugaTipCicluInvatamant">
+            <Parameter Name="denumire" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MyDNNDatabaseModelStoreContainer" CdmEntityContainer="MyDNNDatabaseEntities">
-          <EntitySetMapping Name="EvaluareProfesorApreciats">
-            <EntityTypeMapping TypeName="MyDNNDatabaseModel.EvaluareProfesorApreciat">
-              <MappingFragment StoreEntitySet="EvaluareProfesorApreciat">
-                <ScalarProperty Name="ID_EvaluareProfesor" ColumnName="ID_EvaluareProfesor" />
-                <ScalarProperty Name="ID_ProgramStudiu" ColumnName="ID_ProgramStudiu" />
-                <ScalarProperty Name="ID_Profesor" ColumnName="ID_Profesor" />
-                <ScalarProperty Name="NumarVoturi" ColumnName="NumarVoturi" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+        <EntityContainerMapping StorageEntityContainer="MyDNNDatabaseModelStoreContainer" CdmEntityContainer="MyDNNDatabaseEntities1">
           <EntitySetMapping Name="Facultates">
             <EntityTypeMapping TypeName="MyDNNDatabaseModel.Facultate">
               <MappingFragment StoreEntitySet="Facultate">
@@ -279,6 +377,7 @@
             <EntityTypeMapping TypeName="MyDNNDatabaseModel.Profesor">
               <MappingFragment StoreEntitySet="Profesor">
                 <ScalarProperty Name="ID_Profesor" ColumnName="ID_Profesor" />
+                <ScalarProperty Name="ID_FacultateServiciu" ColumnName="ID_FacultateServiciu" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Nume" ColumnName="Nume" />
                 <ScalarProperty Name="Prenume" ColumnName="Prenume" />
@@ -292,9 +391,19 @@
               <MappingFragment StoreEntitySet="ProgramStudiu">
                 <ScalarProperty Name="ID_ProgramStudiu" ColumnName="ID_ProgramStudiu" />
                 <ScalarProperty Name="ID_Facultate" ColumnName="ID_Facultate" />
+                <ScalarProperty Name="ID_TipCiclu" ColumnName="ID_TipCiclu" />
                 <ScalarProperty Name="DenumireScurta" ColumnName="DenumireScurta" />
                 <ScalarProperty Name="Denumire" ColumnName="Denumire" />
-                <ScalarProperty Name="ID_TipCiclu" ColumnName="ID_TipCiclu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RezultatVotProfesorProgramStudius">
+            <EntityTypeMapping TypeName="MyDNNDatabaseModel.RezultatVotProfesorProgramStudiu">
+              <MappingFragment StoreEntitySet="RezultatVotProfesorProgramStudiu">
+                <ScalarProperty Name="ID_RezultatVot" ColumnName="ID_RezultatVot" />
+                <ScalarProperty Name="ID_ProgramStudiu" ColumnName="ID_ProgramStudiu" />
+                <ScalarProperty Name="ID_Profesor" ColumnName="ID_Profesor" />
+                <ScalarProperty Name="NumarVoturi" ColumnName="NumarVoturi" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -306,6 +415,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="adaugaRezultatVotProfesorProgramStudiu" FunctionName="MyDNNDatabaseModel.Store.adaugaRezultatVotProfesorProgramStudiu" />
+          <FunctionImportMapping FunctionImportName="spAdaugaFacultate" FunctionName="MyDNNDatabaseModel.Store.spAdaugaFacultate" />
+          <FunctionImportMapping FunctionImportName="spAdaugaProfesor" FunctionName="MyDNNDatabaseModel.Store.spAdaugaProfesor" />
+          <FunctionImportMapping FunctionImportName="spAdaugaProgramStudiu" FunctionName="MyDNNDatabaseModel.Store.spAdaugaProgramStudiu" />
+          <FunctionImportMapping FunctionImportName="spAdaugaTipCicluInvatamant" FunctionName="MyDNNDatabaseModel.Store.spAdaugaTipCicluInvatamant" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

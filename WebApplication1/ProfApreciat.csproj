@@ -136,9 +136,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\EvaluareProfesorApreciat.cs">
-      <DependentUpon>ProfApreciatModels.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Facultate.cs">
       <DependentUpon>ProfApreciatModels.tt</DependentUpon>
     </Compile>
@@ -161,6 +158,9 @@
       <DependentUpon>ProfApreciatModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProgramStudiu.cs">
+      <DependentUpon>ProfApreciatModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RezultatVotProfesorProgramStudiu.cs">
       <DependentUpon>ProfApreciatModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipCicluInvatamant.cs">

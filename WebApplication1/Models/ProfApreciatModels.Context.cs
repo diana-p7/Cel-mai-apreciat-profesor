@@ -12,11 +12,13 @@ namespace ProfApreciat.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class MyDNNDatabaseEntities : DbContext
     {
         public MyDNNDatabaseEntities()
-            : base("name=MyDNNDatabaseEntities")
+            : base("name=MyDNNDatabaseEntities1")
         {
         }
     
@@ -25,10 +27,99 @@ namespace ProfApreciat.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<EvaluareProfesorApreciat> EvaluareProfesorApreciats { get; set; }
         public virtual DbSet<Facultate> Facultates { get; set; }
         public virtual DbSet<Profesor> Profesors { get; set; }
         public virtual DbSet<ProgramStudiu> ProgramStudius { get; set; }
+        public virtual DbSet<RezultatVotProfesorProgramStudiu> RezultatVotProfesorProgramStudius { get; set; }
         public virtual DbSet<TipCicluInvatamant> TipCicluInvatamants { get; set; }
+    
+        public virtual int adaugaRezultatVotProfesorProgramStudiu(Nullable<int> idProgramStudiu, Nullable<int> idProfesor, Nullable<short> numarVoturi, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var idProgramStudiuParameter = idProgramStudiu.HasValue ?
+                new ObjectParameter("idProgramStudiu", idProgramStudiu) :
+                new ObjectParameter("idProgramStudiu", typeof(int));
+    
+            var idProfesorParameter = idProfesor.HasValue ?
+                new ObjectParameter("idProfesor", idProfesor) :
+                new ObjectParameter("idProfesor", typeof(int));
+    
+            var numarVoturiParameter = numarVoturi.HasValue ?
+                new ObjectParameter("numarVoturi", numarVoturi) :
+                new ObjectParameter("numarVoturi", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("adaugaRezultatVotProfesorProgramStudiu", idProgramStudiuParameter, idProfesorParameter, numarVoturiParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spAdaugaFacultate(string denumireScurta, string denumire, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var denumireScurtaParameter = denumireScurta != null ?
+                new ObjectParameter("denumireScurta", denumireScurta) :
+                new ObjectParameter("denumireScurta", typeof(string));
+    
+            var denumireParameter = denumire != null ?
+                new ObjectParameter("denumire", denumire) :
+                new ObjectParameter("denumire", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaFacultate", denumireScurtaParameter, denumireParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spAdaugaProfesor(string nume, string prenume, string email, string gradDidactic, Nullable<int> idFacultateServiciu, Nullable<bool> eligibilRemunerare, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var numeParameter = nume != null ?
+                new ObjectParameter("nume", nume) :
+                new ObjectParameter("nume", typeof(string));
+    
+            var prenumeParameter = prenume != null ?
+                new ObjectParameter("prenume", prenume) :
+                new ObjectParameter("prenume", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            var gradDidacticParameter = gradDidactic != null ?
+                new ObjectParameter("gradDidactic", gradDidactic) :
+                new ObjectParameter("gradDidactic", typeof(string));
+    
+            var idFacultateServiciuParameter = idFacultateServiciu.HasValue ?
+                new ObjectParameter("idFacultateServiciu", idFacultateServiciu) :
+                new ObjectParameter("idFacultateServiciu", typeof(int));
+    
+            var eligibilRemunerareParameter = eligibilRemunerare.HasValue ?
+                new ObjectParameter("eligibilRemunerare", eligibilRemunerare) :
+                new ObjectParameter("eligibilRemunerare", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaProfesor", numeParameter, prenumeParameter, emailParameter, gradDidacticParameter, idFacultateServiciuParameter, eligibilRemunerareParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spAdaugaProgramStudiu(Nullable<int> idFacultate, Nullable<int> idTipCiclu, string denumireScurta, string denumire, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var idFacultateParameter = idFacultate.HasValue ?
+                new ObjectParameter("idFacultate", idFacultate) :
+                new ObjectParameter("idFacultate", typeof(int));
+    
+            var idTipCicluParameter = idTipCiclu.HasValue ?
+                new ObjectParameter("idTipCiclu", idTipCiclu) :
+                new ObjectParameter("idTipCiclu", typeof(int));
+    
+            var denumireScurtaParameter = denumireScurta != null ?
+                new ObjectParameter("denumireScurta", denumireScurta) :
+                new ObjectParameter("denumireScurta", typeof(string));
+    
+            var denumireParameter = denumire != null ?
+                new ObjectParameter("denumire", denumire) :
+                new ObjectParameter("denumire", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaProgramStudiu", idFacultateParameter, idTipCicluParameter, denumireScurtaParameter, denumireParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spAdaugaTipCicluInvatamant(string denumire, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var denumireParameter = denumire != null ?
+                new ObjectParameter("denumire", denumire) :
+                new ObjectParameter("denumire", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaTipCicluInvatamant", denumireParameter, responseMessage, insertedID);
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace ProfApreciat.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Facultate()
         {
+            this.Profesors = new HashSet<Profesor>();
             this.ProgramStudius = new HashSet<ProgramStudiu>();
         }
     
@@ -24,6 +25,8 @@ namespace ProfApreciat.Models
         public string DenumireScurta { get; set; }
         public string Denumire { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Profesor> Profesors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramStudiu> ProgramStudius { get; set; }
     }

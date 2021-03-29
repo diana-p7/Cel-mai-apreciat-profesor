@@ -17,18 +17,18 @@ namespace ProfApreciat.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProgramStudiu()
         {
-            this.EvaluareProfesorApreciats = new HashSet<EvaluareProfesorApreciat>();
+            this.RezultatVotProfesorProgramStudius = new HashSet<RezultatVotProfesorProgramStudiu>();
         }
     
         public int ID_ProgramStudiu { get; set; }
         public int ID_Facultate { get; set; }
+        public int ID_TipCiclu { get; set; }
         public string DenumireScurta { get; set; }
         public string Denumire { get; set; }
-        public int ID_TipCiclu { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EvaluareProfesorApreciat> EvaluareProfesorApreciats { get; set; }
         public virtual Facultate Facultate { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RezultatVotProfesorProgramStudiu> RezultatVotProfesorProgramStudius { get; set; }
         public virtual TipCicluInvatamant TipCicluInvatamant { get; set; }
     }
 }
