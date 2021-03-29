@@ -12,9 +12,9 @@ namespace ProfApreciat.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class EvaluareProfesorApreciat
+    public partial class RezultatVotProfesorProgramStudiu
     {
-        public int ID_EvaluareProfesor { get; set; }
+        public int ID_RezultatVot { get; set; }
         public int ID_ProgramStudiu { get; set; }
         public int ID_Profesor { get; set; }
         public short NumarVoturi { get; set; }
