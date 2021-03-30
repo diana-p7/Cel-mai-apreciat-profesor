@@ -46,7 +46,12 @@ namespace ProfApreciat.Controllers
             {
                 return Ok(profesori[0]);
             }
-            else return Ok("Setup success");
+            else
+            {
+                Excel excel = new Excel(@"ProfApreciat.xls", 1);
+                return Ok(excel.ReadCell(0, 0));
+              //  return Ok("Setup success");
+            }
         }
 
         [HttpGet]
