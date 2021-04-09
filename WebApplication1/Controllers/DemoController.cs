@@ -38,7 +38,7 @@ namespace ProfApreciat.Controllers
             catch(Exception e)
             {
                 return InternalServerError(e);
-            }
+            }            
         }
 
         [HttpGet]
