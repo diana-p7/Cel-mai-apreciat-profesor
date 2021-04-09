@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="MyDNNDatabaseModel.Facultate" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="MyDNNDatabaseModel.Profesor" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="MyDNNDatabaseModel.ProgramStudiu" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyDNNDatabaseModel.RezultatVotProfesorProgramStudiu" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyDNNDatabaseModel.RezultatVotProfesorProgramStudiu" Width="2" PointX="5.375" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="MyDNNDatabaseModel.TipCicluInvatamant" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
         <AssociationConnector Association="MyDNNDatabaseModel.FK_Profesor_Facultate" ManuallyRouted="false" />
         <AssociationConnector Association="MyDNNDatabaseModel.FK_ProgramStudiu_Facultate" ManuallyRouted="false" />
