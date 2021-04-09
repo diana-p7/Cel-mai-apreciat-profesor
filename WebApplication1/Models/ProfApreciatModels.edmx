@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MyDNNDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MyDNNDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Facultate">
           <Key>
             <PropertyRef Name="ID_Facultate" />
@@ -111,13 +111,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="adaugaRezultatVotProfesorProgramStudiu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="idProgramStudiu" Type="int" Mode="In" />
-          <Parameter Name="idProfesor" Type="int" Mode="In" />
-          <Parameter Name="numarVoturi" Type="smallint" Mode="In" />
-          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
-          <Parameter Name="insertedID" Type="int" Mode="InOut" />
-        </Function>
         <Function Name="spAdaugaFacultate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="denumireScurta" Type="nvarchar" Mode="In" />
           <Parameter Name="denumire" Type="nvarchar" Mode="In" />
@@ -142,11 +135,19 @@
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
           <Parameter Name="insertedID" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="spAdaugaRezultatVotProfesorProgramStudiu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProgramStudiu" Type="int" Mode="In" />
+          <Parameter Name="idProfesor" Type="int" Mode="In" />
+          <Parameter Name="numarVoturi" Type="smallint" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="insertedID" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="spAdaugaTipCicluInvatamant" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="denumire" Type="nvarchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
           <Parameter Name="insertedID" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="spClearDatabase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="MyDNNDatabaseModelStoreContainer">
           <EntitySet Name="Facultate" EntityType="Self.Facultate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
@@ -174,8 +175,7 @@
             <End Role="ProgramStudiu" EntitySet="ProgramStudiu" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MyDNNDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -357,6 +357,14 @@
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="spAdaugaRezultatVotProfesorProgramStudiu">
+            <Parameter Name="idProgramStudiu" Mode="In" Type="Int32" />
+            <Parameter Name="idProfesor" Mode="In" Type="Int32" />
+            <Parameter Name="numarVoturi" Mode="In" Type="Int16" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="insertedID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spClearDatabase" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -415,11 +423,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="adaugaRezultatVotProfesorProgramStudiu" FunctionName="MyDNNDatabaseModel.Store.adaugaRezultatVotProfesorProgramStudiu" />
           <FunctionImportMapping FunctionImportName="spAdaugaFacultate" FunctionName="MyDNNDatabaseModel.Store.spAdaugaFacultate" />
           <FunctionImportMapping FunctionImportName="spAdaugaProfesor" FunctionName="MyDNNDatabaseModel.Store.spAdaugaProfesor" />
           <FunctionImportMapping FunctionImportName="spAdaugaProgramStudiu" FunctionName="MyDNNDatabaseModel.Store.spAdaugaProgramStudiu" />
           <FunctionImportMapping FunctionImportName="spAdaugaTipCicluInvatamant" FunctionName="MyDNNDatabaseModel.Store.spAdaugaTipCicluInvatamant" />
+          <FunctionImportMapping FunctionImportName="spAdaugaRezultatVotProfesorProgramStudiu" FunctionName="MyDNNDatabaseModel.Store.spAdaugaRezultatVotProfesorProgramStudiu" />
+          <FunctionImportMapping FunctionImportName="spClearDatabase" FunctionName="MyDNNDatabaseModel.Store.spClearDatabase" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -15,9 +15,9 @@ namespace ProfApreciat.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class MyDNNDatabaseEntities : DbContext
+    public partial class MyDNNDatabaseEntities1 : DbContext
     {
-        public MyDNNDatabaseEntities()
+        public MyDNNDatabaseEntities1()
             : base("name=MyDNNDatabaseEntities1")
         {
         }
@@ -120,6 +120,28 @@ namespace ProfApreciat.Models
                 new ObjectParameter("denumire", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaTipCicluInvatamant", denumireParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spAdaugaRezultatVotProfesorProgramStudiu(Nullable<int> idProgramStudiu, Nullable<int> idProfesor, Nullable<short> numarVoturi, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var idProgramStudiuParameter = idProgramStudiu.HasValue ?
+                new ObjectParameter("idProgramStudiu", idProgramStudiu) :
+                new ObjectParameter("idProgramStudiu", typeof(int));
+    
+            var idProfesorParameter = idProfesor.HasValue ?
+                new ObjectParameter("idProfesor", idProfesor) :
+                new ObjectParameter("idProfesor", typeof(int));
+    
+            var numarVoturiParameter = numarVoturi.HasValue ?
+                new ObjectParameter("numarVoturi", numarVoturi) :
+                new ObjectParameter("numarVoturi", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaRezultatVotProfesorProgramStudiu", idProgramStudiuParameter, idProfesorParameter, numarVoturiParameter, responseMessage, insertedID);
+        }
+    
+        public virtual int spClearDatabase()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spClearDatabase");
         }
     }
 }

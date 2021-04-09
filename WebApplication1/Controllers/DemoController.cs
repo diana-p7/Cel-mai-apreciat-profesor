@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,33 +21,24 @@ namespace ProfApreciat.Controllers
 #endif
     public class DemoController : DnnApiController
     {
-        static List<String> profesori = new List<string>();
-
-        [AllowAnonymous]
-        [HttpPost]
-        public IHttpActionResult AdaugaProfesor(String email, String nume)
-        {
-            try
-            {
-                profesori.Add(email + nume);
-                return Ok("Add success");
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-            
-        }
-
         [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult Get()
         {
-            if (profesori.Count > 0)
+            try
             {
-                return Ok(profesori[0]);
+                String message = ExcelDataReader.InsertData();
+
+                if (String.IsNullOrEmpty(message))
+                {
+                    return Ok("Data load success");
+                }
+                else throw new ArgumentException(message);
             }
-            else return Ok("Setup success");
+            catch(Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
         [HttpGet]
