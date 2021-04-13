@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -27,18 +30,60 @@ namespace ProfApreciat.Controllers
         {
             try
             {
+
                 String message = ExcelDataReader.InsertData();
 
                 if (String.IsNullOrEmpty(message))
                 {
-                    return Ok("Data load success");
+                    string connStr = "data source=DESKTOP-K0KFAGK;initial catalog=MyDNNDatabase;User Id=MyDNNSQLUser;Password=pass;";
+                    SqlConnection conn = new SqlConnection(connStr);
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("spRezultateVoturiLicenta", conn);
+                    //SqlCommand cmd = new SqlCommand("spEligibilRemunerareLicentaSiMaster1", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                  
+                    string temp = "";
+
+           
+                   /* SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        temp += reader["Nume"].ToString();
+                        temp += " ";
+                        temp += reader["Prenume"].ToString();
+                        temp += " ";
+                        temp += reader["DenumireScurta"].ToString();
+                        temp += " ";
+                        temp += "<br>";
+                    } */
+
+                     SqlDataReader reader = cmd.ExecuteReader();
+                     while (reader.Read())
+                     {
+                         temp += reader["Nume"].ToString();
+                         temp += " ";
+                         temp += reader["Prenume"].ToString();
+                         temp += " ";
+                         temp += reader["Denumire"].ToString();
+                         temp += " ";
+                         temp += reader["VoturiTotale"].ToString();
+                         temp += " ";
+                         temp += "<br>";
+                     } 
+
+                    conn.Close();
+                    return Ok(temp);
+
+
                 }
                 else throw new ArgumentException(message);
             }
-            catch(Exception e)
+
+            catch (Exception e)
             {
                 return InternalServerError(e);
-            }            
+            }
         }
 
         [HttpGet]
