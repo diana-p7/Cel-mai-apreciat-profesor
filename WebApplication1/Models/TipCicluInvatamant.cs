@@ -14,16 +14,7 @@ namespace ProfApreciat.Models
     
     public partial class TipCicluInvatamant
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TipCicluInvatamant()
-        {
-            this.ProgramStudius = new HashSet<ProgramStudiu>();
-        }
-    
         public int ID_TipCiclu { get; set; }
         public string Denumire { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProgramStudiu> ProgramStudius { get; set; }
     }
 }

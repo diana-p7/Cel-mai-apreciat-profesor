@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Core.Objects;
-using System.Data.SqlTypes;
 using ProfApreciat.Models;
 using SpreadsheetLight;
-
+using System.Drawing;
+using System.Diagnostics;
 
 namespace ProfApreciat
 {
@@ -20,34 +20,34 @@ namespace ProfApreciat
             DataRow row;
             DataRelation relation;
 
-            DataTable tableFacultate = new DataTable("Facultate");
+            //DataTable tableFacultate = new DataTable("Facultate");
 
-            column = new DataColumn();
-            column.DataType = Type.GetType("System.Int32");
-            column.ColumnName = "ID_Facultate";
-            column.ReadOnly = true;
-            column.Unique = true;
-            column.AutoIncrement = true;
-            column.AutoIncrementSeed = 1;
-            column.AutoIncrementStep = 1;
-            tableFacultate.Columns.Add(column);
+            //column = new DataColumn();
+            //column.DataType = Type.GetType("System.Int32");
+            //column.ColumnName = "ID_Facultate";
+            //column.ReadOnly = true;
+            //column.Unique = true;
+            //column.AutoIncrement = true;
+            //column.AutoIncrementSeed = 1;
+            //column.AutoIncrementStep = 1;
+            //tableFacultate.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = Type.GetType("System.String");
-            column.ColumnName = "DenumireScurta";
-            column.Unique = true;
-            column.AllowDBNull = false;
-            tableFacultate.Columns.Add(column);
+            //column = new DataColumn();
+            //column.DataType = Type.GetType("System.String");
+            //column.ColumnName = "DenumireScurta";
+            //column.Unique = true;
+            //column.AllowDBNull = false;
+            //tableFacultate.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = Type.GetType("System.String");
-            column.ColumnName = "Denumire";
-            tableFacultate.Columns.Add(column);
+            //column = new DataColumn();
+            //column.DataType = Type.GetType("System.String");
+            //column.ColumnName = "Denumire";
+            //tableFacultate.Columns.Add(column);
 
-            PrimaryKeyColumns[0] = tableFacultate.Columns["ID_Facultate"];
-            tableFacultate.PrimaryKey = PrimaryKeyColumns;
+            //PrimaryKeyColumns[0] = tableFacultate.Columns["ID_Facultate"];
+            //tableFacultate.PrimaryKey = PrimaryKeyColumns;
 
-            dataSet.Tables.Add(tableFacultate);
+            //dataSet.Tables.Add(tableFacultate);
 
             DataTable tableTipCicluInvatamant = new DataTable("TipCicluInvatamant");
 
@@ -86,9 +86,9 @@ namespace ProfApreciat
             tableProgramStudiu.Columns.Add(column);
 
             column = new DataColumn();
-            column.DataType = Type.GetType("System.Int32");
-            column.ColumnName = "ID_Facultate";
-            column.AllowDBNull = false;
+            column.DataType = Type.GetType("System.String");
+            column.ColumnName = "Facultate";
+            column.AllowDBNull = true;
             tableProgramStudiu.Columns.Add(column);
 
             column = new DataColumn();
@@ -109,13 +109,25 @@ namespace ProfApreciat
             column.ColumnName = "Denumire";
             tableProgramStudiu.Columns.Add(column);
 
+            column = new DataColumn();
+            column.DataType = Type.GetType("System.Int32");
+            column.ColumnName = "NumarAbsolventi";
+            column.AllowDBNull = false;
+            tableProgramStudiu.Columns.Add(column);
+
+            column = new DataColumn();
+            column.DataType = Type.GetType("System.Int32");
+            column.ColumnName = "NumarVotanti";
+            column.AllowDBNull = false;
+            tableProgramStudiu.Columns.Add(column);
+
             PrimaryKeyColumns[0] = tableProgramStudiu.Columns["ID_ProgramStudiu"];
             tableProgramStudiu.PrimaryKey = PrimaryKeyColumns;
 
             dataSet.Tables.Add(tableProgramStudiu);
 
-            relation = new DataRelation("ProgramStudiu_Facultate", tableFacultate.Columns["ID_Facultate"], tableProgramStudiu.Columns["ID_Facultate"]);
-            tableProgramStudiu.ParentRelations.Add(relation);
+            //relation = new DataRelation("ProgramStudiu_Facultate", tableFacultate.Columns["ID_Facultate"], tableProgramStudiu.Columns["ID_Facultate"]);
+            //tableProgramStudiu.ParentRelations.Add(relation);
 
             relation = new DataRelation("ProgramStudiu_TipCicluInvatamant", tableTipCicluInvatamant.Columns["ID_TipCiclu"], tableProgramStudiu.Columns["ID_TipCiclu"]);
             tableProgramStudiu.ParentRelations.Add(relation);
@@ -133,16 +145,15 @@ namespace ProfApreciat
             tableProfesor.Columns.Add(column);
 
             column = new DataColumn();
-            column.DataType = Type.GetType("System.Int32");
-            column.ColumnName = "ID_FacultateServiciu";
-            column.AllowDBNull = false;
+            column.DataType = Type.GetType("System.String");
+            column.ColumnName = "FacultateServiciu";
+            column.AllowDBNull = true;
             tableProfesor.Columns.Add(column);
 
             column = new DataColumn();
             column.DataType = Type.GetType("System.String");
             column.ColumnName = "Email";
-            column.Unique = true;
-            column.AllowDBNull = false;
+            column.AllowDBNull = true;
             tableProfesor.Columns.Add(column);
 
             column = new DataColumn();
@@ -154,13 +165,13 @@ namespace ProfApreciat
             column = new DataColumn();
             column.DataType = Type.GetType("System.String");
             column.ColumnName = "Prenume";
-            column.AllowDBNull = false;
+            column.AllowDBNull = true;
             tableProfesor.Columns.Add(column);
 
             column = new DataColumn();
             column.DataType = Type.GetType("System.String");
             column.ColumnName = "GradDidactic";
-            column.AllowDBNull = false;
+            column.AllowDBNull = true;
             tableProfesor.Columns.Add(column);
 
             column = new DataColumn();
@@ -174,8 +185,8 @@ namespace ProfApreciat
 
             dataSet.Tables.Add(tableProfesor);
 
-            relation = new DataRelation("Profesor_Facultate", tableFacultate.Columns["ID_Facultate"], tableProfesor.Columns["ID_FacultateServiciu"]);
-            tableProfesor.ParentRelations.Add(relation);
+            //relation = new DataRelation("Profesor_Facultate", tableFacultate.Columns["ID_Facultate"], tableProfesor.Columns["ID_FacultateServiciu"]);
+            //tableProfesor.ParentRelations.Add(relation);
 
             DataTable tableRezultatVotProfesorProgramStudiu = new DataTable("RezultatVotProfesorProgramStudiu");
 
@@ -207,7 +218,7 @@ namespace ProfApreciat
             column.AllowDBNull = false;
             tableRezultatVotProfesorProgramStudiu.Columns.Add(column);
 
-            PrimaryKeyColumns[0] = tableRezultatVotProfesorProgramStudiu.Columns["ID_Profesor"];
+            PrimaryKeyColumns[0] = tableRezultatVotProfesorProgramStudiu.Columns["ID_RezultatVot"];
             tableRezultatVotProfesorProgramStudiu.PrimaryKey = PrimaryKeyColumns;
 
             dataSet.Tables.Add(tableRezultatVotProfesorProgramStudiu);
@@ -220,109 +231,235 @@ namespace ProfApreciat
 
             // insert in TipCicluInvatamant licenta si master
 
-            row = dataSet.Tables["TipCicluInvatamant"].NewRow();
-            row["Denumire"] = "Licenta";
-            dataSet.Tables["TipCicluInvatamant"].Rows.Add(row);
-
-            row = dataSet.Tables["TipCicluInvatamant"].NewRow();
-            row["Denumire"] = "Master";
-            dataSet.Tables["TipCicluInvatamant"].Rows.Add(row);
+            foreach(string denumireTipCicluInvatamant in GlobalValues.Map_TIP_CICLU_INVATAMANT_ID.Keys)
+            {
+                row = dataSet.Tables["TipCicluInvatamant"].NewRow();
+                row["Denumire"] = denumireTipCicluInvatamant;
+                dataSet.Tables["TipCicluInvatamant"].Rows.Add(row);
+            }
 
             return dataSet;
         }
 
         public static string InsertData()
         {
-            String message = String.Empty;
+            ObjectParameter responseMg = new ObjectParameter("responseMessage", Type.GetType("System.String"));
+            ObjectParameter insertedId = new ObjectParameter("insertedID", Type.GetType("System.Int32"));
+            string msg = String.Empty;
             DataSet dataSet = makeDataSet();
-            ReadData(dataSet);
-            ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
-            ObjectParameter insertedID = new ObjectParameter("insertedID", typeof(int));
 
-            using (MyDNNDatabaseEntities1 context = new MyDNNDatabaseEntities1())
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            ReadData(dataSet);
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            msg += "ReadData : " + elapsedTime;
+
+            stopWatch = new Stopwatch();
+            stopWatch.Start();
+            using (MyDNNDatabaseEntities context = new MyDNNDatabaseEntities())
             {
                 context.spClearDatabase();
-
+                
                 foreach (DataRow tipCiclu in dataSet.Tables["TipCicluInvatamant"].Rows)
                 {
-                    context.spAdaugaTipCicluInvatamant((string)tipCiclu["Denumire"], responseMessage, insertedID);
-                }
+                    //context.TipCicluInvatamants.Add(new TipCicluInvatamant()
+                    //{
+                    //    Denumire = (string)tipCiclu["Denumire"]
+                    //});
 
-                foreach (DataRow fac in dataSet.Tables["Facultate"].Rows)
-                {
-                    context.spAdaugaFacultate((string)fac["DenumireScurta"], null, responseMessage, insertedID);
+                     context.spAdaugaTipCicluInvatamant((string)tipCiclu["Denumire"], responseMg, insertedId);
                 }
 
                 foreach (DataRow ps in dataSet.Tables["ProgramStudiu"].Rows)
                 {
-                    context.spAdaugaProgramStudiu((int)ps["ID_Facultate"], (int)ps["ID_TipCiclu"], (string)ps["DenumireScurta"], null, responseMessage, insertedID);
+                    //context.ProgramStudius.Add(new ProgramStudiu()
+                    //{
+                    //    ID_TipCiclu = (int)ps["ID_TipCiclu"],
+                    //    Facultate = (string)ps["Facultate"],
+                    //    DenumireScurta = (string)ps["DenumireScurta"],
+                    //    NumarAbsolventi = (int)ps["NumarAbsolventi"],
+                    //    NumarVotanti = (int)ps["NumarVotanti"]
+                    //});
+
+                    context.spAdaugaProgramStudiu(
+                        (string)ps["Facultate"],
+                        (int)ps["ID_TipCiclu"],
+                        (string)ps["DenumireScurta"],
+                        null,
+                        (int)ps["NumarAbsolventi"],
+                        (int)ps["NumarVotanti"],
+                        responseMg,
+                        insertedId
+                        );
                 }
 
                 foreach (DataRow prof in dataSet.Tables["Profesor"].Rows)
                 {
-                    context.spAdaugaProfesor((string)prof["Nume"], (string)prof["Prenume"], (string)prof["Email"], (string)prof["GradDidactic"], (int)prof["ID_FacultateServiciu"], (bool)prof["EligibilRemunerare"], responseMessage, insertedID);
+                    //context.Profesors.Add(new Profesor()
+                    //{
+                    //    Nume = (string)prof["Nume"],
+                    //    Prenume = (string)prof["Prenume"],
+                    //    Email = (string)prof["Email"],
+                    //    GradDidactic = (string)prof["GradDidactic"],
+                    //    FacultateServiciu = (string)prof["FacultateServiciu"],
+                    //    EligibilRemunerare = (bool)prof["EligibilRemunerare"]
+                    //});
+
+                    context.spAdaugaProfesor(
+                        (string)prof["Nume"],
+                        (string)prof["Prenume"],
+                        (string)prof["Email"],
+                        (string)prof["GradDidactic"],
+                        (string)prof["FacultateServiciu"],
+                        (bool)prof["EligibilRemunerare"],
+                        responseMg,
+                        insertedId
+                        );
                 }
 
                 foreach (DataRow rv in dataSet.Tables["RezultatVotProfesorProgramStudiu"].Rows)
                 {
-                    context.spAdaugaRezultatVotProfesorProgramStudiu((int)rv["ID_ProgramStudiu"], (int)rv["ID_Profesor"], (short)rv["NumarVoturi"], responseMessage, insertedID);
+                    //context.RezultatVotProfesorProgramStudius.Add(new RezultatVotProfesorProgramStudiu()
+                    //{
+                    //    ID_ProgramStudiu = (int)rv["ID_ProgramStudiu"],
+                    //    ID_Profesor = (int)rv["ID_Profesor"],
+                    //    NumarVoturi = (short)rv["NumarVoturi"]
+                    //});
+
+                    context.spAdaugaRezultatVotProfesorProgramStudiu(
+                        (int)rv["ID_ProgramStudiu"],
+                        (int)rv["ID_Profesor"],
+                        (short)rv["NumarVoturi"],
+                        responseMg,
+                        insertedId
+                        );
                 }
+
+               // context.SaveChanges();
             }
 
-            return message;
+            stopWatch.Stop();
+            ts = stopWatch.Elapsed;
+            elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            msg += "InsertData : " + elapsedTime;
+
+            dataSet.Dispose();
+            return msg;
         }
 
         public static DataSet ReadData(DataSet dataSet)
         {
-            const int idLicenta = 1, idMaster = 2;
+            int cnt = 0;
+            Random rand = new Random();
+            int voturi = 0;
+            Dictionary<int, int> votanti = new Dictionary<int, int>();
             Dictionary<string, int> denumireFacultateCuId = new Dictionary<string, int>();
             Dictionary<string, int> denumirePSCuId = new Dictionary<string, int>();
             DataRow row;
 
-            using (SLDocument sl = new SLDocument(@"C:\Excel\0X_Cel_mai_apreciat_profesor_2021_univ_de lucru.xlsx", "nr_votanti"))
+            // **********TO DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 : xl => xlsx
+
+            using (SLDocument sl = new SLDocument(GlobalValues.Path_FILE_INPUT))
             {
                 SLWorksheetStatistics stats = sl.GetWorksheetStatistics();
-                int iStartColumnIndex = stats.StartColumnIndex;
+                int iStartColumnIndex = stats.StartColumnIndex, psStartColumnIndex = 0;
                 String denumireFacultate = String.Empty, denumirePS = String.Empty;
+                int numarAbsolventi = 0, numarVotanti = 0; // TO DO : receive "numarVotanti" from db *******************************!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                Color psPatternForegroundColor;
+                int indexColumnEmail = 0, indexColumnNume = 0, indexColumnPrenume = 0;
+                int indexColumnGradDidactic = 0, indexColumnFacultatea = 0;
 
-                for (int columnIndex = iStartColumnIndex + 6; columnIndex <= stats.EndColumnIndex; columnIndex++)
+                for (int columnIndex = stats.StartColumnIndex; columnIndex <= 6; columnIndex++)
                 {
-                    if (String.IsNullOrEmpty(sl.GetCellValueAsString(stats.StartRowIndex, columnIndex)))
+                    string columnHeader = sl.GetCellValueAsString(stats.StartRowIndex, columnIndex);
+
+                    if (String.IsNullOrEmpty(columnHeader))
                     {
                         break;
                     }
 
-                    denumirePS = sl.GetCellValueAsString(stats.StartRowIndex, columnIndex);
+                    if (columnHeader.ToUpper().Equals(GlobalValues.ColumnHeader_NUME))
+                    {
+                        indexColumnNume = columnIndex;
+                        continue;
+                    }
+
+                    if (columnHeader.ToUpper().Equals(GlobalValues.ColumnHeader_PRENUME))
+                    {
+                        indexColumnPrenume = columnIndex;
+                        continue;
+                    }
+
+                    if (columnHeader.ToUpper().Equals(GlobalValues.ColumnHeader_EMAIL))
+                    {
+                        indexColumnEmail = columnIndex;
+                        continue;
+                    }
+
+                    if (columnHeader.ToUpper().Equals(GlobalValues.ColumnHeader_GRAD_DIDACTIC))
+                    {
+                        indexColumnGradDidactic = columnIndex;
+                        continue;
+                    }
+
+                    if (columnHeader.ToUpper().Equals(GlobalValues.ColumnHeader_FACULTATEA))
+                    {                
+                        indexColumnFacultatea = columnIndex;
+                        psStartColumnIndex = indexColumnFacultatea + 1;
+                        continue;
+                    }                  
+                }
+
+                for (int columnIndex = psStartColumnIndex; columnIndex <= stats.EndColumnIndex; columnIndex++)
+                {                  
+                    denumirePS = sl.GetCellValueAsString(stats.StartRowIndex, columnIndex);               
                     denumireFacultate = sl.GetCellValueAsString(stats.StartRowIndex + 1, columnIndex);
 
-                    // adauga facultatea daca e necesar
-                    if (!denumireFacultateCuId.ContainsKey(denumireFacultate))
+                    if (String.IsNullOrEmpty(denumirePS) && String.IsNullOrEmpty(denumireFacultate))
                     {
-                        row = dataSet.Tables["Facultate"].NewRow();
-                        row["DenumireScurta"] = denumireFacultate;
-                        dataSet.Tables["Facultate"].Rows.Add(row);
-
-                        denumireFacultateCuId.Add(denumireFacultate, (int)row["ID_Facultate"]);
+                        break;
                     }
+
+                    if (String.IsNullOrEmpty(denumirePS))
+                    {
+                        continue;
+                        // TO DO : ISSUE WARNING?
+                    }
+
+                    numarAbsolventi = sl.GetCellValueAsInt32(stats.StartRowIndex + 2, columnIndex);
+                    numarVotanti = sl.GetCellValueAsInt32(stats.StartRowIndex + 3, columnIndex);
+                    psPatternForegroundColor = sl.GetCellStyle(stats.StartRowIndex, columnIndex).Fill.PatternForegroundColor;          
 
                     // adauga programul de studiu
 
-                    sl.GetCellStyle(stats.StartRowIndex, columnIndex).Fill.PatternBackgroundColor.ToArgb();
                     row = dataSet.Tables["ProgramStudiu"].NewRow();
-                    row["DenumireScurta"] = denumirePS;
-                    row["ID_Facultate"] = denumireFacultateCuId[denumireFacultate];
+                    row["DenumireScurta"] = denumirePS;                  
+                    row["Facultate"] = denumireFacultate;
+                    row["NumarAbsolventi"] = numarAbsolventi;
+                    row["NumarVotanti"] = numarVotanti;
 
-                    if (sl.GetCellStyle(stats.StartRowIndex, columnIndex).Fill.PatternForegroundColor.R == 5) //PS : Licenta
+                    // TO DO : CODIFICARE SIGUR!!!!
+                    if (psPatternForegroundColor.R == GlobalValues.PatternForegroundColor_MASTER_RGB.Item1 &&
+                        psPatternForegroundColor.G == GlobalValues.PatternForegroundColor_MASTER_RGB.Item2 &&
+                        psPatternForegroundColor.B == GlobalValues.PatternForegroundColor_MASTER_RGB.Item3) //PS : Licenta
                     {
-                        row["ID_TipCiclu"] = idLicenta;
+                        row["ID_TipCiclu"] = GlobalValues.Map_TIP_CICLU_INVATAMANT_ID[GlobalValues.Denumire_TIP_CICLU_INVATAMANT_MASTER];
                     }
-                    else //PS : Master
+                    else   //PS : Master
                     {
-                        row["ID_TipCiclu"] = idMaster;
+                        row["ID_TipCiclu"] = GlobalValues.Map_TIP_CICLU_INVATAMANT_ID[GlobalValues.Denumire_TIP_CICLU_INVATAMANT_LICENTA];
                     }
 
+                    cnt++;
                     dataSet.Tables["ProgramStudiu"].Rows.Add(row);
                     denumirePSCuId.Add(denumirePS, (int)row["ID_ProgramStudiu"]);
+                    votanti.Add((int)row["ID_ProgramStudiu"], numarVotanti);
                 }
 
                 string nume = String.Empty, prenume = String.Empty, email = String.Empty, gradDidactic = String.Empty, facultateServiciu = String.Empty;
@@ -330,16 +467,10 @@ namespace ProfApreciat
 
                 for (int rowIndex = stats.StartRowIndex + 4; rowIndex <= stats.EndRowIndex; ++rowIndex)
                 {
-                    nume = sl.GetCellValueAsString(rowIndex, iStartColumnIndex + 1);
-                    prenume = sl.GetCellValueAsString(rowIndex, iStartColumnIndex + 2);
-                    email = sl.GetCellValueAsString(rowIndex, iStartColumnIndex + 3);
-                    gradDidactic = sl.GetCellValueAsString(rowIndex, iStartColumnIndex + 4);
-                    facultateServiciu = sl.GetCellValueAsString(rowIndex, iStartColumnIndex + 5);
+                    nume = sl.GetCellValueAsString(rowIndex, indexColumnNume);
+                    prenume = sl.GetCellValueAsString(rowIndex, indexColumnPrenume);
 
-                    if (String.IsNullOrEmpty(nume) &&
-                        String.IsNullOrEmpty(prenume) &&
-                        String.IsNullOrEmpty(email) &&
-                        String.IsNullOrEmpty(gradDidactic))
+                    if (String.IsNullOrEmpty(nume) && String.IsNullOrEmpty(prenume))
                     {
                         break;
                     }
@@ -347,10 +478,24 @@ namespace ProfApreciat
                     row = dataSet.Tables["Profesor"].NewRow();
                     row["Nume"] = nume;
                     row["Prenume"] = prenume;
-                    row["Email"] = email;
-                    row["GradDidactic"] = gradDidactic;
 
-                    if (gradDidactic.ToUpper().Equals("CE"))
+                    if (indexColumnEmail != 0)
+                    {
+                        email = sl.GetCellValueAsString(rowIndex, indexColumnEmail);
+                        row["Email"] = email;
+                    }
+                    else
+                    {
+                        row["Email"] = String.Empty;
+                    }
+
+                    gradDidactic = sl.GetCellValueAsString(rowIndex, indexColumnGradDidactic);
+                    facultateServiciu = sl.GetCellValueAsString(rowIndex, indexColumnFacultatea);
+
+                    row["GradDidactic"] = gradDidactic;
+                    row["FacultateServiciu"] = facultateServiciu;
+
+                    if (gradDidactic.ToUpper().Equals(GlobalValues.DenumireScurta_CADRU_EXTERN))
                     {
                         row["EligibilRemunerare"] = false;
                     }
@@ -359,22 +504,32 @@ namespace ProfApreciat
                         row["EligibilRemunerare"] = true;
                     }
 
-                    row["ID_FacultateServiciu"] = denumireFacultateCuId[facultateServiciu]; // to analye
-
                     dataSet.Tables["Profesor"].Rows.Add(row);
 
                     //ADD REZULTATE VOT
+                    int vot1 = rand.Next(cnt + iStartColumnIndex + 6) + iStartColumnIndex + 6;
+                    int vot2 = rand.Next(cnt + iStartColumnIndex + 6) + iStartColumnIndex + 6;
+                    if (vot2 == vot1)
+                    {
+                        vot2++;
+                    }
 
-                    for (int columnIndex = iStartColumnIndex + 6; columnIndex <= stats.EndColumnIndex; columnIndex++)
+                    for (int columnIndex = psStartColumnIndex; columnIndex <= stats.EndColumnIndex; columnIndex++)
                     {
                         denumirePS = sl.GetCellValueAsString(stats.StartRowIndex, columnIndex);
+                        denumireFacultate = sl.GetCellValueAsString(stats.StartRowIndex + 1, columnIndex);
 
-                        if (String.IsNullOrEmpty(denumirePS))
+                        if (String.IsNullOrEmpty(denumirePS) && String.IsNullOrEmpty(denumireFacultate))
                         {
                             break;
                         }
 
-                        if (!sl.GetCellValueAsString(rowIndex, columnIndex).ToUpper().Equals("DA"))
+                        if (String.IsNullOrEmpty(denumirePS))
+                        {
+                            continue;
+                        }
+
+                        if (!sl.GetCellValueAsString(rowIndex, columnIndex).ToUpper().Equals("DA") && vot1 != columnIndex && vot2 != columnIndex)
                         {
                             continue;
                         }
@@ -383,8 +538,11 @@ namespace ProfApreciat
                         row = dataSet.Tables["RezultatVotProfesorProgramStudiu"].NewRow();
                         row["ID_Profesor"] = idProfesor;
                         row["ID_ProgramStudiu"] = denumirePSCuId[denumirePS];
-                        row["NumarVoturi"] = 0;
+                        voturi = rand.Next(votanti[denumirePSCuId[denumirePS]]);
+                        votanti[denumirePSCuId[denumirePS]] -= voturi;
+                        row["NumarVoturi"] = voturi;                  
                         dataSet.Tables["RezultatVotProfesorProgramStudiu"].Rows.Add(row);
+                        //sl.SetCellValue(rowIndex, columnIndex, "DA");
                     }
                 }
 
