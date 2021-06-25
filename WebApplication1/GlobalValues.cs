@@ -25,5 +25,6 @@ namespace ProfApreciat
         public static string Path_FILE_INPUT = @"C:\Excel\0X_Cel_mai_apreciat_profesor_2021_univ_de lucru.xlsx";
 
         public static int PROCENT_ELIGIBILI = 10;
+
     }
 }

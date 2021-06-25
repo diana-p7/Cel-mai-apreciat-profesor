@@ -22,11 +22,19 @@ namespace ProfApreciat
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
+
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(new System.Net.Http.Formatting.RequestHeaderMapping("Accept",
                 "text/html",
                 StringComparison.InvariantCultureIgnoreCase,
                 true,
                 "application/json"));
+
+            GlobalConfiguration.Configuration.Formatters.XmlFormatter.MediaTypeMappings.Add(new System.Net.Http.Formatting.RequestHeaderMapping("Accept",
+                "text/html",
+                StringComparison.InvariantCultureIgnoreCase,
+                true,
+                "multipart/form-data"));
 
         }
     }
