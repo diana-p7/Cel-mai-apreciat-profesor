@@ -32,6 +32,19 @@ namespace ProfApreciat.Models
         public virtual DbSet<RezultatVotProfesorProgramStudiu> RezultatVotProfesorProgramStudius { get; set; }
         public virtual DbSet<TipCicluInvatamant> TipCicluInvatamants { get; set; }
     
+        public virtual int spAdaugaFacultate(string denumireScurta, string denumire, ObjectParameter responseMessage, ObjectParameter insertedID)
+        {
+            var denumireScurtaParameter = denumireScurta != null ?
+                new ObjectParameter("denumireScurta", denumireScurta) :
+                new ObjectParameter("denumireScurta", typeof(string));
+    
+            var denumireParameter = denumire != null ?
+                new ObjectParameter("denumire", denumire) :
+                new ObjectParameter("denumire", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAdaugaFacultate", denumireScurtaParameter, denumireParameter, responseMessage, insertedID);
+        }
+    
         public virtual int spAdaugaProfesor(string nume, string prenume, string email, string gradDidactic, string facultateServiciu, Nullable<bool> eligibilRemunerare, ObjectParameter responseMessage, ObjectParameter insertedID)
         {
             var numeParameter = nume != null ?

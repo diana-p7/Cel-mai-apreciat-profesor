@@ -21,14 +21,16 @@ namespace ProfApreciat.Models
         }
     
         public int ID_ProgramStudiu { get; set; }
-        public string Facultate { get; set; }
         public int ID_TipCiclu { get; set; }
+        public string Facultate { get; set; }
         public string DenumireScurta { get; set; }
         public string Denumire { get; set; }
         public int NumarAbsolventi { get; set; }
         public int NumarVotanti { get; set; }
+        public Nullable<System.DateTime> DataInchidereVot { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RezultatVotProfesorProgramStudiu> RezultatVotProfesorProgramStudius { get; set; }
+        public virtual TipCicluInvatamant TipCicluInvatamant { get; set; }
     }
 }

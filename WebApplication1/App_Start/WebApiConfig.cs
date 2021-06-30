@@ -12,7 +12,6 @@ namespace ProfApreciat
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -29,12 +28,6 @@ namespace ProfApreciat
                 StringComparison.InvariantCultureIgnoreCase,
                 true,
                 "application/json"));
-
-            GlobalConfiguration.Configuration.Formatters.XmlFormatter.MediaTypeMappings.Add(new System.Net.Http.Formatting.RequestHeaderMapping("Accept",
-                "text/html",
-                StringComparison.InvariantCultureIgnoreCase,
-                true,
-                "multipart/form-data"));
 
         }
     }

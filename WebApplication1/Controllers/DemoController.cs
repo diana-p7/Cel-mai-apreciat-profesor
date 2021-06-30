@@ -30,38 +30,8 @@ namespace ProfApreciat.Controllers
 #endif
     public class DemoController : DnnApiController
     {
-        [AllowAnonymous]
         [HttpGet]
-        public IHttpActionResult Get()
-        {         
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            try
-            {
-                //string msg = ProcessInputData.InsertData();
-                string moodleData = ProcessInputData.FetchMoodleData();
-                return Ok(moodleData);
-                //using (MyDNNDatabaseEntities context = new MyDNNDatabaseEntities())
-                //{
-                //    List<Profesor> profesori = context.Profesors.ToList();
-                //    ProcessOutputData.WriteOutputFile(profesori);
-                //}
-
-                //stopWatch.Stop();
-                //TimeSpan ts = stopWatch.Elapsed;
-                //string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                //    ts.Hours, ts.Minutes, ts.Seconds,
-                //    ts.Milliseconds / 10);
-                //return Ok("Total time : " + elapsedTime);
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }          
-        }
-
-        [HttpGet]
-        public IHttpActionResult GetVotingListForPs(string ps)
+        public IHttpActionResult GetVotingOptions(string ps)
         {
             JObject response = ProcessInputData.GetProfesorsForPS(ps);
 
